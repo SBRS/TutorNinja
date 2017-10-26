@@ -6,7 +6,7 @@
 <h2>@ViewData["Title"].</h2>
 
 <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-    <h4>Create a new account.</h4>
+    <h4>Create a new account</h4>
     <hr />
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
@@ -45,9 +45,16 @@
         </div>
     </div>
     <div class="form-group">
+        <label asp-for="PhoneNumber" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
         <label asp-for="Bio" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <textarea asp-for="Bio" class="form-control" placeholder="Please write few things about yourself..."></textarea>
+            <textarea asp-for="Bio" class="form-control" placeholder="Please write few things about yourself..." rows="7"></textarea>
             <span asp-validation-for="Bio" class="text-danger"></span>
         </div>
     </div>

@@ -12,9 +12,9 @@ namespace TutorNinja.Controllers
 {
     public class AdsController : Controller
     {
-        private readonly AdContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public AdsController(AdContext context)
+        public AdsController(ApplicationDbContext context)
         {
             _context = context;    
         }
@@ -46,7 +46,7 @@ namespace TutorNinja.Controllers
         // GET: Ads/Create
         public IActionResult Create()
         {
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID");
+            ViewData["CategoryID"] = new SelectList(_context.Categories.AsNoTracking(), "CategoryID", "CategoryName");
             return View();
         }
 
@@ -63,7 +63,7 @@ namespace TutorNinja.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", ad.CategoryID);
+            ViewData["CategoryID"] = new SelectList(_context.Categories.AsNoTracking(), "CategoryID", "CategoryName", ad.CategoryID);
             return View(ad);
         }
 
@@ -80,7 +80,7 @@ namespace TutorNinja.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", ad.CategoryID);
+            ViewData["CategoryID"] = new SelectList(_context.Categories.AsNoTracking(), "CategoryID", "CategoryName", ad.CategoryID);
             return View(ad);
         }
 
@@ -116,7 +116,7 @@ namespace TutorNinja.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", ad.CategoryID);
+            ViewData["CategoryID"] = new SelectList(_context.Categories.AsNoTracking(), "CategoryID", "CategoryName", ad.CategoryID);
             return View(ad);
         }
 

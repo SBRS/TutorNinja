@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TutorNinja.Data;
+using TutorNinja.Models;
 
-namespace TutorNinja.Models
+namespace TutorNinja.Data
 {
     public class DbInitializer
     {
-        public static void Initialize(AdContext context)
+        public static void Initialize(ApplicationDbContext context)
         {
             context.Database.EnsureCreated();
         }

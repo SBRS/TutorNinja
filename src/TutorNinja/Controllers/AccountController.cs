@@ -118,7 +118,7 @@ namespace TutorNinja.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name=model.Name,
-                    Address =model.Address, Bio=model.Bio };
+                    Address =model.Address, PhoneNumber = model.PhoneNumber, Bio=model.Bio };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

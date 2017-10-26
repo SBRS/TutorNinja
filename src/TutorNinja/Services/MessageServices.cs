@@ -16,7 +16,7 @@ namespace TutorNinja.Services
         public Task SendEmailAsync(string email, string subject, string message)
         {
             var mes = new MimeMessage();
-            mes.From.Add(new MailboxAddress("TutorNinja", "lia15@myunitec.ac.nz"));
+            mes.From.Add(new MailboxAddress("TutorNinja", "tutorninja@outlook.com"));
             mes.To.Add(new MailboxAddress("User", email));
             mes.Subject = subject;
 
@@ -38,7 +38,7 @@ namespace TutorNinja.Services
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
 
                 // Note: only needed if the SMTP server requires authentication
-                client.Authenticate("lia15@myunitec.ac.nz", "06121987");
+                client.Authenticate("tutorninja@outlook.com", "123456qwerty");
 
                 client.Send(mes);
                 client.Disconnect(true);

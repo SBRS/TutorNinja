@@ -12,9 +12,9 @@ namespace TutorNinja.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly AdContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public CategoriesController(AdContext context)
+        public CategoriesController(ApplicationDbContext context)
         {
             _context = context;    
         }
