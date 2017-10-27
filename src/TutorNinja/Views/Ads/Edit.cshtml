@@ -11,7 +11,8 @@
         <h4>Ad</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="AdID" />
+        <input type="hidden" asp-for="AdID" />
+        <input type="hidden" asp-for="CreateDate" placeholder="@Model.CreateDate" />
         <div class="form-group">
             <label asp-for="CategoryID" class="control-label col-md-2"></label>
             <div class="col-md-10">
@@ -20,17 +21,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="CreateDate" class="col-md-2 control-label"></label>
+            <label asp-for="Title" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="CreateDate" class="form-control" />
-                <span asp-validation-for="CreateDate" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Description" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger" />
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
@@ -41,10 +35,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Title" class="col-md-2 control-label"></label>
+            <label asp-for="Description" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger" />
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger" />
             </div>
         </div>
         <div class="form-group">

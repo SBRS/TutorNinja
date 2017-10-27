@@ -34,7 +34,11 @@ namespace TutorNinja.Controllers
                 return NotFound();
             }
 
-            var ad = await _context.Ads.SingleOrDefaultAsync(m => m.AdID == id);
+            var ad = await _context.Ads
+                .Include(a => a.Category)
+                .Include(a => a.User)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(m => m.AdID == id);
             if (ad == null)
             {
                 return NotFound();
@@ -55,10 +59,11 @@ namespace TutorNinja.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AdID,CategoryID,CreateDate,Description,Price,Title")] Ad ad)
+        public async Task<IActionResult> Create([Bind("CategoryID,Description,Price,Title")] Ad ad)
         {
             if (ModelState.IsValid)
             {
+                ad.CreateDate = DateTime.Now;
                 _context.Add(ad);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -89,7 +94,7 @@ namespace TutorNinja.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AdID,CategoryID,CreateDate,Description,Price,Title")] Ad ad)
+        public async Task<IActionResult> Edit(int id, [Bind("AdID,CategoryID,Description,CreateDate,Price,Title")] Ad ad)
         {
             if (id != ad.AdID)
             {
