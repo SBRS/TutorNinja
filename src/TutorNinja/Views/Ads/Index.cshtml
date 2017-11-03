@@ -1,28 +1,53 @@
-@model IEnumerable<TutorNinja.Models.Ad>
+@model PaginatedList<TutorNinja.Models.Ad>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Ads";
 }
 
-<h2>Index</h2>
+<hr />
+<div>
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Search: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" /> <input type="submit" value="Search" class="btn btn-default" /> |
+                <a asp-action="Index" class="btn btn-success">Back To Full List</a>
+            </p>
+        </div>
+    </form>
+</div>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<div>
+    Category:
+    <a asp-action="Index" class="btn btn-success" asp-route-id="">All</a>
+    @foreach (var item in ViewBag.Categories)
+    {
+        <a asp-action="Index" class="btn btn-danger" asp-route-id="@item.CategoryID">@item.CategoryName</a>
+    }
+</div>
+
+<div>
+    <h3 class="title">@ViewData["CurrentCategory"]</h3>
+    <hr />
+</div>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                Title
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Price</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Description
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreateDate)
+                Date created
             </th>
             <th></th>
         </tr>
@@ -31,10 +56,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
@@ -51,3 +76,22 @@
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled btn">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled btn">
+    Next
+</a>

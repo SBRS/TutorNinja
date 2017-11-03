@@ -7,23 +7,84 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TutorNinja.Data;
 using TutorNinja.Models;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace TutorNinja.Controllers
 {
     public class AdsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private UserManager<ApplicationUser> _userManager;
 
-        public AdsController(ApplicationDbContext context)
+        public AdsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
         }
 
         // GET: Ads
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id, string sortOrder, string currentFilter, string searchString, int? page)
         {
-            var adContext = _context.Ads.Include(a => a.Category);
-            return View(await adContext.ToListAsync());
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentCategory"] = "All Categories";
+            ViewData["CurrentFilter"] = searchString;
+
+            var ads = from a in _context.Ads.Include(a => a.Category)
+                       select a;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ads = ads.Where(s => s.Title.Contains(searchString) || s.Description.Contains(searchString));
+            }
+
+            if (id != null)
+            {
+                ads = ads.Where(s => s.CategoryID.Equals(id));
+                ViewData["CurrentCategory"] = _context.Categories.Where(i => i.CategoryID == id.Value).Single().CategoryName;
+            }
+
+            switch (sortOrder)
+            {
+                case "Price":
+                    ads = ads.OrderBy(s => s.Price);
+                    break;
+                case "price_desc":
+                    ads = ads.OrderByDescending(s => s.Price);
+                    break;
+                default:
+                    ads = ads.OrderBy(s => s.CreateDate);
+                    break;
+            }
+
+            int pageSize = 5;
+            ViewBag.Categories = _context.Categories.AsNoTracking().ToList();
+            return View(await PaginatedList<Ad>.CreateAsync(ads.AsNoTracking(), page ?? 1, pageSize));
+
+            //var adContext = _context.Ads
+            //    .AsNoTracking()
+            //    .Include(a => a.Category); ;
+            //if (id != null)
+            //{
+            //     adContext = _context.Ads
+            //        .AsNoTracking()
+            //        .Where(s => s.CategoryID.Equals(id))
+            //        .Include(a => a.Category);
+            //    ViewData["CurrentCategory"] = _context.Categories.Where(i => i.CategoryID == id.Value).Single().CategoryName;
+            //}
+
+            //ViewBag.Categories = _context.Categories.AsNoTracking().ToList();
+            //return View(await adContext.ToListAsync());
         }
 
         // GET: Ads/Details/5
@@ -61,8 +122,11 @@ namespace TutorNinja.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CategoryID,Description,Price,Title")] Ad ad)
         {
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+
             if (ModelState.IsValid)
             {
+                ad.User = user;
                 ad.CreateDate = DateTime.Now;
                 _context.Add(ad);
                 await _context.SaveChangesAsync();
