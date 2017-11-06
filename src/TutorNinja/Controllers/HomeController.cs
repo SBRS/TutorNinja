@@ -20,7 +20,7 @@ namespace TutorNinja.Controllers
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Help()
         {
             ViewData["Message"] = "Your contact page.";
 

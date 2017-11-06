@@ -14,6 +14,7 @@
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log off</button>
             </li>
+            <li><a asp-area="" asp-controller="Home" asp-action="Help"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a></li>
         </ul>
     </form>
 }
@@ -22,6 +23,6 @@ else
     <ul class="nav navbar-nav navbar-right">
         <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
         <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
-        <li><a asp-area="" asp-controller="Home" asp-action="Contact"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a></li>
+        <li><a asp-area="" asp-controller="Home" asp-action="Help"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a></li>
     </ul>
 }
